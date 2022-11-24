@@ -6,6 +6,7 @@ const server = http.createServer(app);
 
 const { Server } = require('socket.io');
 const { Game } = require('./game');
+const { getResult } = require('./rules');
 const io = new Server(server);
 
 const PORT = process.env.PORT || 8080;
@@ -17,6 +18,7 @@ const SOCKET_EVENT = {
     disconnect: 'disconnect',
     gameState: 'game-state',
     drawCards: 'draw-cards',
+    checkHand: 'check-hand',
 };
 
 const games = {};
@@ -27,10 +29,17 @@ app.use(express.static('build'));
 const emitGameState = (game) => io.in(game.roomId).emit(SOCKET_EVENT.gameState, game.gameState);
 const pushGame = (game) => (games[game.roomId] = game);
 
-app.all('*', (req, res) => {
+app.get('*', (req, res) => {
     res.sendFile(HTML_FILE, (err) => {
         if (err) res.status(500).send(err);
     });
+});
+
+app.post('/checkhand', (req, res) => {
+    const cards = req.body.cards;
+
+    if (cards) res.send(getResult(cards));
+    else res.status(400).send('Malformed body');
 });
 
 io.on(SOCKET_EVENT.connection, (socket) => {
