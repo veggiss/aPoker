@@ -3,8 +3,6 @@ import { Socket } from '../App';
 
 export const SOCKET_EVENT = {
     joinTable: 'join-table',
-    connection: 'connection',
-    disconnect: 'disconnect',
     gameState: 'game-state',
     drawCards: 'draw-cards',
 };
@@ -13,7 +11,7 @@ type GameState = {
     roomId: string;
     dealer: {
         cards: string[];
-        round: number;
+        result: string;
         roundEnded: boolean;
     };
 };

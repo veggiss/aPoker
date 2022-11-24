@@ -1,6 +1,5 @@
-const { getDeck, getHand } = require('./rules');
+const { getDeck, getResult } = require('./rules');
 
-// Mutable state
 class Dealer {
     // Private val
     #deck;
@@ -23,7 +22,7 @@ class Dealer {
             this.cards.push(...this.draw(1));
 
             if (this.cards.length === 5) {
-                this.result = getHand(this.cards);
+                this.result = getResult(this.cards);
                 this.roundEnded = true;
             }
         }

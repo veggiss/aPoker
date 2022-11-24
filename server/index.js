@@ -59,8 +59,6 @@ io.on(SOCKET_EVENT.connection, (socket) => {
         const clientId = socket.client.id;
         const game = games[clientId];
 
-        console.log('drawing cards', game);
-
         if (game) {
             game.update();
 

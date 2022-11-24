@@ -1,4 +1,3 @@
-// Spar, ruter, kløver, hjerter
 const Deck = {
     suits: ['s', 'r', 'k', 'h'],
     values: ['2', '3', '4', '5', '6', '7', '8', '9', 't', 'j', 'q', 'k', 'a'],
@@ -29,7 +28,7 @@ const getDeck = () => {
     return shuffle(deck);
 };
 
-const getHand = (cards) => {
+const getResult = (cards) => {
     const values = cards.map((a) => a[0]).sort((a, b) => Deck.values.indexOf(a) - Deck.values.indexOf(b));
     const suits = cards.map((a) => a[1]).sort();
 
@@ -49,15 +48,14 @@ const getHand = (cards) => {
     const threeOfAKind = checkDuplicates(3);
     const twoPair = duplicateSums.filter((n) => n === 2).length === 2;
 
-    return {
-        royalFlush: values[0] === 't' && flush && straight,
-        straightFlush: flush && straight,
-        house: pair && threeOfAKind,
-        straight: straight,
-        threeOfAKind: threeOfAKind,
-        twoPair: twoPair,
-        pair: pair,
-    };
+    if (values[0] === 't' && flush && straight) return 'royal flush';
+    else if (flush && straight) return 'straight flush';
+    else if (pair && threeOfAKind) return 'full house';
+    else if (straight) return 'straight';
+    else if (threeOfAKind) return 'three of a kind';
+    else if (twoPair) return 'two pair';
+    else if (pair) return 'pair';
+    else return 'nothing';
 };
 
-module.exports = { getHand, getDeck };
+module.exports = { getResult, getDeck };
