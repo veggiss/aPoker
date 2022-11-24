@@ -36,18 +36,16 @@ app.all('*', (req, res) => {
 io.on(SOCKET_EVENT.connection, (socket) => {
     socket.on(SOCKET_EVENT.joinTable, () => {
         const clientId = socket.client.id;
-        const game = games[clientId];
-
-        socket.join(clientId);
+        let game = games[clientId];
 
         if (!game) {
-            const newGame = new Game(clientId);
+            game = new Game(clientId);
 
-            pushGame(newGame);
-            emitGameState(game);
-        } else {
-            emitGameState(game);
+            pushGame(game);
         }
+
+        socket.join(clientId);
+        emitGameState(game);
     });
 
     socket.on(SOCKET_EVENT.disconnect, () => {
