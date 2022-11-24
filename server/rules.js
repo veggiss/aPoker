@@ -54,7 +54,7 @@ const getResult = (cards) => {
 
     const pair = checkDuplicates(2);
     const threeOfAKind = checkDuplicates(3);
-    const fourOfAKind = checkSequence(4);
+    const fourOfAKind = checkDuplicates(4);
     const twoPair = duplicateSums.filter((n) => n === 2).length === 2;
 
     if (values[0] === 't' && flush && straight) return 'royal flush';
