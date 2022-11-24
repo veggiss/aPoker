@@ -5,11 +5,11 @@ const http = require('http');
 const server = http.createServer(app);
 
 const { Server } = require('socket.io');
-const { Game } = require('./server/game');
+const { Game } = require('./game');
 const io = new Server(server);
 
 const PORT = process.env.PORT || 8080;
-const DIST_DIR = path.join(__dirname, 'build');
+const DIST_DIR = path.join(__dirname, '..', 'build');
 const HTML_FILE = path.join(DIST_DIR, 'index.html');
 const SOCKET_EVENT = {
     joinTable: 'join-table',
@@ -25,7 +25,7 @@ app.use(express.json());
 app.use(express.static('build'));
 
 const emitGameState = (game) => io.in(game.roomId).emit(SOCKET_EVENT.gameState, game.gameState);
-const pushGame = (game) => (games[game.gameState.roomId] = game);
+const pushGame = (game) => (games[game.roomId] = game);
 
 app.all('*', (req, res) => {
     res.sendFile(HTML_FILE, (err) => {
@@ -44,7 +44,7 @@ io.on(SOCKET_EVENT.connection, (socket) => {
             pushGame(game);
         }
 
-        socket.join(clientId);
+        socket.join(game.roomId);
         emitGameState(game);
     });
 
@@ -54,6 +54,19 @@ io.on(SOCKET_EVENT.connection, (socket) => {
 
         if (game) delete games[clientId];
     });
+
+    socket.on(SOCKET_EVENT.drawCards, () => {
+        const clientId = socket.client.id;
+        const game = games[clientId];
+
+        console.log('drawing cards', game);
+
+        if (game) {
+            game.update();
+
+            emitGameState(game);
+        }
+    });
 });
 
-app.listen(PORT, () => console.log(`The app server is running on port: ${PORT}`));
+server.listen(PORT, () => console.log(`The app server is running on port: ${PORT}`));

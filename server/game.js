@@ -8,7 +8,7 @@ class Dealer {
     constructor() {
         this.#deck = getDeck();
         this.cards = [];
-        this.round = 0;
+        this.result = null;
         this.roundEnded = false;
     }
 
@@ -17,18 +17,23 @@ class Dealer {
     }
 
     deal() {
-        if (this.round === 0) this.cards.push(...this.draw(3));
-        else if (this.round < 3) this.cards.push(...this.draw(1));
-        else this.roundEnded = true;
+        if (this.cards.length === 0) {
+            this.cards.push(...this.draw(3));
+        } else if (this.cards.length < 5) {
+            this.cards.push(...this.draw(1));
 
-        if (!this.roundEnded) this.round++;
+            if (this.cards.length === 5) {
+                this.result = getHand(this.cards);
+                this.roundEnded = true;
+            }
+        }
     }
 }
 
 class Game {
     constructor(roomId) {
+        this.roomId = roomId;
         this.gameState = {
-            roomId: roomId,
             dealer: new Dealer(),
         };
     }

@@ -1,17 +1,19 @@
 {
   "name": "boilerplate",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.ts",
   "license": "MIT",
   "scripts": {
     "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
-    "start": "node .",
-    "start-dev": "webpack serve --port 3000 --mode",
-    "build": "cross-env NODE_ENV=production webpack --mode production"
+    "start": "webpack --mode production && node server/index.js",
+    "start-dev": "webpack serve --port 3000 --mode development",
+    "build": "webpack --mode production",
+    "build-start": "webpack --mode development && node server/index.js"
   },
   "devDependencies": {
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
+    "@types/socket.io": "^3.0.2",
     "@typescript-eslint/eslint-plugin": "5.42.1",
     "@typescript-eslint/parser": "5.42.1",
     "cross-env": "^7.0.3",
