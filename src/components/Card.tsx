@@ -58,7 +58,7 @@ const PlayingCard: FC<Props> = ({ value }: Props) => {
     return (
         <Grow in={true} timeout={1000} unmountOnExit>
             <Box sx={cardStyle} color={color}>
-                <Typography sx={cardNumberStyle}>{number}</Typography>
+                <Typography sx={cardNumberStyle}>{number === 'T' ? '10' : number}</Typography>
 
                 <SvgIcon sx={cardIconStyle}>{icon}</SvgIcon>
             </Box>
